@@ -25,6 +25,7 @@ function createAndSendAnswer() {
             type: "send_answer",
             answer: answer
         })
+        console.log("send answer");
     }, error => console.log(error))
 }
 
@@ -36,7 +37,8 @@ function sendData(data) {
 let localStream
 let username
 let peerConn
-function joinCall() {
+
+async function joinCall() {
     username = document.getElementById('username-input').value
     document.getElementById("video-div").style.display = "inline"
     navigator.getUserMedia({
@@ -54,19 +56,58 @@ function joinCall() {
         let configuration = {
             iceServers: [
                 {
-                    "urls": [ipTurnServer],
+                    "url": ipTurnServer,
                     "username": "ninefingers",
                     "credential": "youhavetoberealistic"
                 }
             ]
         }
+        // let configuration = {
+        //     iceServers: [
+        //         {
+        //             "urls": ["stun:stun.l.google.com:19302",
+        //                 "stun:stun1.l.google.com:19302",
+        //                 "stun:stun2.l.google.com:19302"]
+        //         }
+        //     ]
+        // }
+        // let configuration = {
+        //     iceServers: [
+        //         {
+        //             "urls": [ipStunServer]
+        //         }
+        //     ]
+        // }
         peerConn = new RTCPeerConnection(configuration)
-        peerConn.addStream(localStream);
+        // stream.getTracks().forEach(function (track) {
+        //     peerConn.addTrack(track, stream);
+        //     console.log("add track");
+        // })
+        // let inboundStream = null;
+
+        // peerConn.ontrack = (e) => {
+        //     if (e.streams && e.streams[0]) {
+        //         document.getElementById("remote-video").srcObject = e.streams[0]
+
+        //     } else {
+        //         // if (!inboundStream) {
+        //         //     inboundStream = new MediaStream();
+        //         //     document.getElementById("remote-video").srcObject = inboundStream;
+        //         // }
+        //         // inboundStream.addTrack(e.track);
+        //     }
+
+        // }
+        peerConn.addStream(localStream)
+
         peerConn.onaddstream = (e) => {
-            document.getElementById("remote-video").srcObject = e.stream
+            document.getElementById("remote-video")
+                .srcObject = e.stream
         }
         peerConn.onicecandidate = ((e) => {
+            console.log(e, 'ice candidate');
             if (e.candidate == null) {
+                console.log("can not send");
                 return
 
             }
@@ -74,6 +115,7 @@ function joinCall() {
                 type: "send_candidate",
                 candidate: e.candidate
             })
+            console.log("send data");
         })
 
         sendData({
