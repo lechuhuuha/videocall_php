@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" placeholder="enter username" id="username-input" >
+        <br>
+        <button onclick="joinCall()" >Join call</button>
+    </div>
+    <div id="video-div" >
+        <video muted id="local-video" autoplay >
+        </video>
+        <video id="remote-video" autoplay   ></video>
+        <div class="call-div">
+            <button onclick="muteVideo()" >Mute video</button>
+            <button onclick="muteAudio()" >Mute audio</button>
+        </div>
+    </div>
+    <script src="./receiver.js"></script>
+    
+</body>
+</html>
